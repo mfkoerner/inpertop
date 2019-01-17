@@ -14,3 +14,5 @@ import os
 import sys
 
 from qmpy import Structure
+
+allstruct = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
