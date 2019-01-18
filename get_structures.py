@@ -16,4 +16,11 @@ import sys
 from qmpy import Structure
 
 allstruct = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
-icsd = Structure.objects.filter(entry__meta_data__value='icsd', label='input')
+icsd = Structure.objects.filter(
+    entry__meta_data__value='icsd', 
+    label='input')
+icsd_53 = Structure.objects.filter(
+    entry__meta_data__value='icsd', 
+    label='input',
+    natoms = 5,
+    nsites = 3)
