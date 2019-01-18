@@ -48,6 +48,6 @@ def pystruct(s):
     lattice = s.cell
     species = [i.species for i in s.atoms]
     coordinates = [i.coord for i in s.atoms]
-    return python.Structure(lattice, species, coordinates)
+    return pymatgen.Structure(lattice, species, coordinates)
 
 print('update')
