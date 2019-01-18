@@ -17,7 +17,7 @@ import importlib as imp
 
 from qmpy import Structure
 
-def upgs:
+def upgs():
     import gs
     imp.reload gs
     from gs import *
