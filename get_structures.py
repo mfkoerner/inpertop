@@ -50,4 +50,12 @@ def pystruct(s):
     coordinates = [i.coord for i in s.atoms]
     return pymatgen.Structure(lattice, species, coordinates)
 
+def getv(s):
+    pys = pystruct(s)
+    try:
+        vs = BV.get_valences()
+    except:
+        vs = None
+    return vs
+
 print('update')
