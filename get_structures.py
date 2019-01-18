@@ -8,6 +8,8 @@ Created on Wed Jan 16 18:05:05 2019
 """
 
 
+import pymatgen
+from pymatgen.analysis.bond_valence import BVAnalyzer
 import qmpy         #quantum materials database interface
 import numpy
 import os
@@ -40,6 +42,10 @@ un53icsd221 = Structure.objects.filter(
     entry__id = F('entry__duplicate_of__id'),
     spacegroup = 221
     )
+
+nonox = [ i for i in un53icsd221 if not 'O3' in i.__str__() ]
+nonoxF = [ i for i in nonox if not 'F3' in i.__str__() ]
+
 a = unicsd53[0]
 b = unicsd53[1]
 c = unicsd53[2]
