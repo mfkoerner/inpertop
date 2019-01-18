@@ -42,6 +42,7 @@ un53icsd221 = Structure.objects.filter(
 nonox = [ i for i in un53icsd221 if not 'O3' in i.__str__() ]
 # Knock out all with 3 Fluorine
 nonoxF = [ i for i in nonox if not 'F3' in i.__str__() ]
+nonoxFstr = [i.__str__() for i in nonoxF]
 
 # Convert oqmd structure to pymatgen structure
 def pystruct(s):
@@ -57,5 +58,8 @@ def getv(s):
     except:
         vs = None
     return vs
+
+def electro(element):
+    return pymatgen.Specie(element).X
 
 print('update')
