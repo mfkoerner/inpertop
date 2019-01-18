@@ -20,7 +20,7 @@ def upgs():
     import gs
     reload(gs)
     from gs import *
-    return()
+    return
 
 allstruct = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
 icsd = Structure.objects.filter(
