@@ -53,7 +53,7 @@ def pystruct(s):
 def getv(s):
     pys = pystruct(s)
     try:
-        vs = BV.get_valences(s)
+        vs = BV.get_valences(pys)
     except:
         vs = None
     return vs
