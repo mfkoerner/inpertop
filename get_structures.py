@@ -10,7 +10,7 @@ Created on Wed Jan 16 18:05:05 2019
 
 import pymatgen
 from pymatgen.analysis.bond_valence import BVAnalyzer
-from pymatgen import structure
+from pymatgen import Structure
 import qmpy         #quantum materials database interface
 import numpy
 import os
