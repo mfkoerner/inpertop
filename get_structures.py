@@ -23,4 +23,4 @@ icsd_53 = Structure.objects.filter(
     entry__meta_data__value='icsd', 
     label='input',
     natoms = 5,
-    nsites = 3)
+    ntypes = 3)
