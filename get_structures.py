@@ -17,6 +17,12 @@ import importlib as imp
 
 from qmpy import Structure
 
+def upgs:
+    import gs
+    imp.reload gs
+    from gs import *
+    return()
+
 allstruct = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
 icsd = Structure.objects.filter(
     entry__meta_data__value='icsd', 
