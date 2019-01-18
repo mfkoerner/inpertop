@@ -33,3 +33,5 @@ unicsd53 = Structure.objects.filter(
     ntypes = 3,
     entry__id = F('entry__duplicate_of__id')
     )
+
+print('update')
