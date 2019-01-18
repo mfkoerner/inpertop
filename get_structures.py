@@ -32,6 +32,14 @@ unicsd53 = Structure.objects.filter(
     ntypes = 3,
     entry__id = F('entry__duplicate_of__id')
     )
+un53icsd221 = Structure.objects.filter(
+    entry__meta_data__value='icsd', 
+    label='input',
+    natoms = 5,
+    ntypes = 3,
+    entry__id = F('entry__duplicate_of__id'),
+    spacegroup = 221
+    )
 a = unicsd53[0]
 b = unicsd53[1]
 c = unicsd53[2]
