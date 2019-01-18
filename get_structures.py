@@ -19,7 +19,7 @@ from qmpy import Structure
 
 def upgs():
     import gs
-    imp.reload gs
+    imp.reload(gs)
     from gs import *
     return()
 
