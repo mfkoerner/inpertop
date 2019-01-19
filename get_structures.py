@@ -25,26 +25,6 @@ def upgs():
     reload(gs)
     return
 
-allstruct = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
-icsd = Structure.objects.filter(
-    entry__meta_data__value='icsd', 
-    label='input')
-
-# Get all unique icsd entries with 5 atoms and 3 unique species in spacegroup 221
-un53icsd221 = Structure.objects.filter(
-    entry__meta_data__value='icsd', 
-    label='input',
-    natoms = 5,
-    ntypes = 3,
-    entry__id = F('entry__duplicate_of__id'),
-    spacegroup = 221
-    )
-# Knock out all with 3 Oxygen
-nonox = [ i for i in un53icsd221 if not 'O3' in i.__str__() ]
-# Knock out all with 3 Fluorine
-nonoxF = [ i for i in nonox if not 'F3' in i.__str__() ]
-nonoxFstr = [i.__str__() for i in nonoxF]
-
 # Convert oqmd structure to pymatgen structure
 def pystruct(s):
     lattice = s.cell
@@ -81,12 +61,36 @@ def elstats(s):
 def is_inv(s):
     """
     Checks if s is an inverse perovskite by method of electronegativity
-    if X-site has lowest electronegativity, returns True, otherwise false
+    if X-site is not highest electronegativity, returns True, otherwise false
     """
     es = elstats(s)
-    if es[0] == es[2]:
+    if es[0] != es[1]:
         return True
     else:
         return False
+
+allstruct = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
+icsd = Structure.objects.filter(
+    entry__meta_data__value='icsd', 
+    label='input')
+
+# Get all unique icsd entries with 5 atoms and 3 unique species in spacegroup 221
+un53icsd221 = Structure.objects.filter(
+    entry__meta_data__value='icsd', 
+    label='input',
+    natoms = 5,
+    ntypes = 3,
+    entry__id = F('entry__duplicate_of__id'),
+    spacegroup = 221
+    )
+# Knock out all with 3 Oxygen
+nonox = [ i for i in un53icsd221 if not 'O3' in i.__str__() ]
+# Knock out all with 3 Fluorine
+nonoxF = [ i for i in nonox if not 'F3' in i.__str__() ]
+nonoxFstr = [i.__str__() for i in nonoxF]
+
+invper = [i for i in nonoxF if is_inv(i)]
+
+
 
 print('update')
