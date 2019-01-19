@@ -75,7 +75,7 @@ def elstats(s):
     electronegativities = [i.X for i in sspec]
     emin = min(electronegativities)
     emax = max(electronegativities)
-    emode = scipy.stats.mode(electronegativites, nan_policy = 'omit')[0][0]
+    emode = scipy.stats.mode(electronegativities, nan_policy = 'omit')[0][0]
     return [emin, emax, emode, electronegativities]
 
 print('update')
