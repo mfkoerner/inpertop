@@ -71,7 +71,7 @@ def elstats(s):
     Returns stats of electronegativity of s and electronegativity
     [min, max, mode, [electronegativity]]
     """
-    sspec = [pymatgen.Specie(i.species.__str__()) for i in s.atoms]
+    sspec = [pymatgen.Specie(i.element.__str__()) for i in s.atoms]
     electronegativities = [i.X for i in sspec]
     emin = min(electronegativities)
     emax = max(electronegativities)
