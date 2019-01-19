@@ -58,16 +58,19 @@ def elstats(s):
     emode = scipy.stats.mode(electronegativities, nan_policy = 'omit')[0][0]
     return [emin, emax, emode, electronegativities]
 
-def is_inv(s):
+def is_inv(s, method = 'max'):
     """
     Checks if s is an inverse perovskite by method of electronegativity
     if X-site is not highest electronegativity, returns True, otherwise false
+    if method = min, checks that X-site is minimum electronegativity
     """
     es = elstats(s)
-    if es[2] != es[1]:
-        return True
+    if method == 'max':
+        return es[2] != es[1]
+    elif method == 'min':
+        return es[2] == es[0]
     else:
-        return False
+        raise ValueError('method must be either "min" or "max"')
 
 allstruct = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
 icsd = Structure.objects.filter(
@@ -89,7 +92,8 @@ nonox = [ i for i in un53icsd221 if not 'O3' in i.__str__() ]
 nonoxF = [ i for i in nonox if not 'F3' in i.__str__() ]
 nonoxFstr = [i.__str__() for i in nonoxF]
 
-invper = [i for i in nonoxF if is_inv(i)]
+invper_min = [i for i in nonoxF if is_inv(i, 'min')]
+invper_max = [i for i in nonoxF if is_inv(i, 'max')]
 
 
 
