@@ -78,4 +78,15 @@ def elstats(s):
     emode = scipy.stats.mode(electronegativities, nan_policy = 'omit')[0][0]
     return [emin, emax, emode, electronegativities]
 
+def is_inv(s):
+    """
+    Checks if s is an inverse perovskite by method of electronegativity
+    if X-site has lowest electronegativity, returns True, otherwise false
+    """
+    es = elstats(s)
+    if es[0] == es[2]:
+        return True
+    else:
+        return False
+
 print('update')
