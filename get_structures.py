@@ -64,7 +64,7 @@ def is_inv(s):
     if X-site is not highest electronegativity, returns True, otherwise false
     """
     es = elstats(s)
-    if es[0] != es[1]:
+    if es[2] != es[1]:
         return True
     else:
         return False
