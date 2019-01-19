@@ -13,7 +13,7 @@ from pymatgen.analysis.bond_valence import BVAnalyzer
 BV = BVAnalyzer()
 import qmpy         #quantum materials database interface
 import numpy
-import scipy
+import scipy.stats
 import os
 import sys
 from django.db.models import F
@@ -64,6 +64,18 @@ def electro(element):
     return pymatgen.Specie(element).X
 
 def mode(s):
-    return scipy.stats.mode([i.species for i in s.atoms])[0][0].__str__()
+    return scipy.stats.mode([i.species for i in s.atoms], nan_policy = 'omit')[0][0].__str__()
+
+def elstats(s):
+    """
+    Returns stats of electronegativity of s and electronegativity
+    [min, max, mode, [electronegativity]]
+    """
+    sspec = [pymatgen.Specie(i.species.__str__()) for i in s.atoms]
+    electronegativities = [i.X for i in sspec]
+    emin = min(electronegativities)
+    emax = max(electronegativities)
+    emode = scipy.stats.mode(electronegativites, nan_policy = 'omit')[0][0]
+    return [emin, emax, emode, electronegativities]
 
 print('update')
