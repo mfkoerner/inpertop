@@ -32,18 +32,33 @@ def pystruct(s):
     coordinates = [i.coord for i in s.atoms]
     return pymatgen.Structure(lattice, species, coordinates)
 
-def getv(s):
+def getv(s, check_inverse = False):
+    """
+    check_inverse only returns true if mode(valences) > 0
+    """
     pys = pystruct(s)
     try:
         vs = BV.get_valences(pys)
     except:
         vs = None
-    return vs
+    if check_inverse:
+        if vs is None:
+            return False
+        elif scipy.stats.mode(vs, nan_policy = 'omit')[0][0] < 0:
+            return False
+        else:
+            return True
+    else:
+        return vs
 
 def electro(element):
     return pymatgen.Specie(element).X
 
 def mode(s):
+    """
+    I don't know if nan_policy is producing weird results
+    for elements without an electronegativity value
+    """
     return scipy.stats.mode([i.species for i in s.atoms], nan_policy = 'omit')[0][0].__str__()
 
 def elstats(s):
@@ -96,6 +111,7 @@ nonoxFstr = [i.__str__() for i in nonoxF]
 
 invper_min = [i for i in nonoxF if is_inv(i, 'min')]
 invper_max = [i for i in nonoxF if is_inv(i, 'max')]
+invper_bv =  [i for i in nonoxF if getv(i, check_inverse = True)]
 
 
 
