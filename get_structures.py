@@ -72,10 +72,12 @@ def is_inv(s, method = 'max'):
     else:
         raise ValueError('method must be either "min" or "max"')
 
-allstruct = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
+allstructperovtheory = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
 icsd = Structure.objects.filter(
     entry__meta_data__value='icsd', 
-    label='input')
+    label='input',
+    entry__id = F('entry__duplicate_of__id')
+    )
 
 # Get all unique icsd entries with 5 atoms and 3 unique species in spacegroup 221
 un53icsd221 = Structure.objects.filter(
