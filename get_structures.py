@@ -23,10 +23,10 @@ from django.db.models import F
 from qmpy import Structure
 
 sg221 = Spacegroup.get(221)
-site_a = WyckoffSite.get('a', sg221)
-site_b = WyckoffSite.get('b', sg221)
-site_c = WyckoffSite.get('c', sg221)
-site_d = WyckoffSite.get('d', sg221)
+wsite_a = WyckoffSite.get('a', sg221)
+wsite_b = WyckoffSite.get('b', sg221)
+wsite_c = WyckoffSite.get('c', sg221)
+wsite_d = WyckoffSite.get('d', sg221)
 
 def upgs():
     import gs
@@ -120,8 +120,11 @@ invper_min = [i for i in nonoxF if is_inv(i, 'min')]
 #inverse perovskite, maximum requirement
 invper_max = [i for i in nonoxF if is_inv(i, 'max')]
 #inverse perovskite, bond valence requirement
-invper_bv =  [i for i in nonoxF if getv(i, check_inverse = True)]
+# invper_bv =  [i for i in nonoxF if getv(i, check_inverse = True)]
 
+# get both types of inverse perovskites
+type1 = [i for i in invper_max if wsite_c in [j.wyckoff for j in i.sites]]
+type2 = [i for i in invper_max if wsite_d in [j.wyckoff for j in i.sites]]
 
 
 print('update')
