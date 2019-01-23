@@ -11,6 +11,8 @@ Created on Wed Jan 16 18:05:05 2019
 import pymatgen
 from pymatgen.analysis.bond_valence import BVAnalyzer
 BV = BVAnalyzer()
+import inspect
+# use with lines = inspect.getsource(foo)
 import qmpy         #quantum materials database interface
 from qmpy.analysis.symmetry import WyckoffSite
 from qmpy.analysis.symmetry import Spacegroup
@@ -123,8 +125,9 @@ invper_max = [i for i in nonoxF if is_inv(i, 'max')]
 # invper_bv =  [i for i in nonoxF if getv(i, check_inverse = True)]
 
 # get both types of inverse perovskites
-type1 = [i for i in invper_max if wsite_c in [j.wyckoff for j in i.sites]]
-type2 = [i for i in invper_max if wsite_d in [j.wyckoff for j in i.sites]]
+type1 = {i for i in invper_max if wsite_c in [j.wyckoff for j in i.sites]}
+type2 = {i for i in invper_max if wsite_d in [j.wyckoff for j in i.sites]}
+type2_transformed = {struct.recenter(struct[[i.wyckoff.symbol for i in struct.sites].index(u'b')], in_place = False, middle = Flase) for struct in type2}
 
 
 print('update')
