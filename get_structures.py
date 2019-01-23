@@ -42,12 +42,10 @@ def getv(s, check_inverse = False):
     except:
         vs = None
     if check_inverse:
-        if vs is None:
-            return False
+        if vs is None: return False
         elif scipy.stats.mode(vs, nan_policy = 'omit')[0][0] < 0:
             return False
-        else:
-            return True
+        else: return True
     else:
         return vs
 
