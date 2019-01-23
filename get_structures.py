@@ -127,7 +127,7 @@ invper_max = [i for i in nonoxF if is_inv(i, 'max')]
 # get both types of inverse perovskites
 type1 = {i for i in invper_max if wsite_c in [j.wyckoff for j in i.sites]}
 type2 = {i for i in invper_max if wsite_d in [j.wyckoff for j in i.sites]}
-type2_transformed = {struct.recenter(struct[[i.wyckoff.symbol for i in struct.sites].index(u'b')], in_place = False, middle = Flase) for struct in type2}
+type2_transformed = {struct.recenter(struct[[i.wyckoff.symbol for i in struct.sites].index(u'b')], in_place = False, middle = False) for struct in type2}
 
 
 print('update')
