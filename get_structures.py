@@ -12,6 +12,8 @@ import pymatgen
 from pymatgen.analysis.bond_valence import BVAnalyzer
 BV = BVAnalyzer()
 import qmpy         #quantum materials database interface
+from qmpy.analysis.symmetry import WyckoffSite
+from qmpy.analysis.symmetry import Spacegroup
 import numpy
 import scipy.stats
 import os
@@ -19,6 +21,12 @@ import sys
 from django.db.models import F
 
 from qmpy import Structure
+
+sg221 = Spacegroup.get(221)
+site_a = WyckoffSite.get('a', sg221)
+site_b = WyckoffSite.get('b', sg221)
+site_c = WyckoffSite.get('c', sg221)
+site_d = WyckoffSite.get('d', sg221)
 
 def upgs():
     import gs
@@ -107,8 +115,11 @@ nonox = [ i for i in un53icsd221 if not 'O3' in i.__str__() ]
 nonoxF = [ i for i in nonox if not 'F3' in i.__str__() ]
 nonoxFstr = [i.__str__() for i in nonoxF]
 
+#inverse perovskite, minimum requirement
 invper_min = [i for i in nonoxF if is_inv(i, 'min')]
+#inverse perovskite, maximum requirement
 invper_max = [i for i in nonoxF if is_inv(i, 'max')]
+#inverse perovskite, bond valence requirement
 invper_bv =  [i for i in nonoxF if getv(i, check_inverse = True)]
 
 
