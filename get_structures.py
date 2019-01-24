@@ -134,13 +134,14 @@ nonoxF = [ i for i in nonox if not 'F3' in i.__str__() ]
 nonoxFstr = [i.__str__() for i in nonoxF]
 
 #inverse perovskite, minimum requirement
-invper_min = [i for i in nonoxF if is_inv(i, 'min')]
+# invper_min = [i for i in nonoxF if is_inv(i, 'min')]
 #inverse perovskite, maximum requirement
 invper_max = [i for i in nonoxF if is_inv(i, 'max')]
 #inverse perovskite, bond valence requirement
 # invper_bv =  [i for i in nonoxF if getv(i, check_inverse = True)]
 
 # filter out F block electrons
+invper_nof = [i for i in invper_max if len(PARTIAL_F.intersect(set(i.elements))) == 0]
 
 final_list = invper_max
 # get both types of inverse perovskites (searches for existance of certain wyckoff sites)
