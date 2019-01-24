@@ -143,7 +143,7 @@ invper_max = [i for i in nonoxF if is_inv(i, 'max')]
 # filter out F block electrons
 invper_nof = [i for i in invper_max if len(PARTIAL_F.intersection(set(i.elements))) == 0]
 
-final_list = invper_max
+final_list = invper_nof
 # get both types of inverse perovskites (searches for existance of certain wyckoff sites)
 type1 = {i for i in final_list if WSITE_C in [j.wyckoff for j in i.sites]}
 type2 = {i for i in final_list if WSITE_D in [j.wyckoff for j in i.sites]}
