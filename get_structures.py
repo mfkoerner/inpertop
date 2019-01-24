@@ -46,10 +46,25 @@ PARTIAL_F = {Element.get(i) for i in PARTIAL_F_strs}
 
 
 
-def upgs():
-    import gs
-    reload(gs)
-    return
+class structstats():
+    """Docstring here
+
+    Bugs: 
+    Does not update structure if you try to, just 
+    create a new instance if you want a new structure
+    """
+    def __init__(self, structs):
+        """ structs should be a list of structure objects """
+        self.structs = structs
+        self.n = len(self.structs)
+    def to_python(self):
+        """ returns list of python structures """
+        self.lattices = [i.cell for i in self.structs]
+        self.species = [[j.species for j in s.atoms] for s in self.structs]
+        self.coordinates = [[i.coord for i in s.atoms] for s in self.structs]
+        self.pystruct = [pymatgen.Structure(self.lattices[i], self.species[i],
+         self.coordinates[i]) for i in range(self.n)]
+        return self.pystruct
 
 # Convert oqmd structure to pymatgen structure
 def pystruct(s):
@@ -145,7 +160,9 @@ invper_nof = [i for i in invper_max if len(PARTIAL_F.intersection(set(i.elements
 
 final_list = invper_nof
 # get both types of inverse perovskites (searches for existance of certain wyckoff sites)
+# type 1 A: a1; B: b1; X: c3; This is Ram's preferred way
 type1 = {i for i in final_list if WSITE_C in [j.wyckoff for j in i.sites]}
+# type 2 A: b1; B: a1; X: d3
 type2 = {i for i in final_list if WSITE_D in [j.wyckoff for j in i.sites]}
 # broken because of bug in qmpy.materials.structures.py definition of translate line 1462
 type2_transformed = {struct.recenter(struct[[i.wyckoff.symbol for i in struct.sites].index(u'b')],
