@@ -17,19 +17,30 @@ import qmpy         #quantum materials database interface
 from qmpy.analysis.symmetry import WyckoffSite
 from qmpy.analysis.symmetry import Spacegroup
 from qmpy.materials.element import Element
+from qmpy import Structure
 import numpy
 import scipy.stats
 import os
 import sys
 from django.db.models import F
 
-from qmpy import Structure
+# relative paths
+import os
+dirname = os.path.dirname(__file__)
+def relpath(path):
+    return os.path.join(dirname, path)
 
+
+
+### important variables ###
+# space group and wyckoff sites for inverse perovskites
 sg221 = Spacegroup.get(221)
 wsite_a = WyckoffSite.get('a', sg221)
 wsite_b = WyckoffSite.get('b', sg221)
 wsite_c = WyckoffSite.get('c', sg221)
 wsite_d = WyckoffSite.get('d', sg221)
+# partial f electrons
+
 
 def upgs():
     import gs
