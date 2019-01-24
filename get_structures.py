@@ -16,6 +16,7 @@ import inspect
 import qmpy         #quantum materials database interface
 from qmpy.analysis.symmetry import WyckoffSite
 from qmpy.analysis.symmetry import Spacegroup
+from qmpy.materials.element import Element
 import numpy
 import scipy.stats
 import os
@@ -124,10 +125,17 @@ invper_max = [i for i in nonoxF if is_inv(i, 'max')]
 #inverse perovskite, bond valence requirement
 # invper_bv =  [i for i in nonoxF if getv(i, check_inverse = True)]
 
-# get both types of inverse perovskites
-type1 = {i for i in invper_max if wsite_c in [j.wyckoff for j in i.sites]}
-type2 = {i for i in invper_max if wsite_d in [j.wyckoff for j in i.sites]}
-type2_transformed = {struct.recenter(struct[[i.wyckoff.symbol for i in struct.sites].index(u'b')], in_place = False, middle = False) for struct in type2}
+# filter out F block electrons
+
+final_list = invper_max
+# get both types of inverse perovskites (searches for existance of certain wyckoff sites)
+type1 = {i for i in final_list if wsite_c in [j.wyckoff for j in i.sites]}
+type2 = {i for i in final_list if wsite_d in [j.wyckoff for j in i.sites]}
+# broken because of bug in qmpy.materials.structures.py definition of translate line 1462
+type2_transformed = {struct.recenter(struct[[i.wyckoff.symbol for i in struct.sites].index(u'b')],
+ in_place = False, middle = False) for struct in type2}
+
+
 
 
 print('update')
