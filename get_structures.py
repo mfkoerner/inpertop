@@ -34,12 +34,16 @@ def relpath(path):
 
 ### important variables ###
 # space group and wyckoff sites for inverse perovskites
-sg221 = Spacegroup.get(221)
-wsite_a = WyckoffSite.get('a', sg221)
-wsite_b = WyckoffSite.get('b', sg221)
-wsite_c = WyckoffSite.get('c', sg221)
-wsite_d = WyckoffSite.get('d', sg221)
+SG221 = Spacegroup.get(221)
+WSITE_A = WyckoffSite.get('a', SG221)
+WSITE_B = WyckoffSite.get('b', SG221)
+WSITE_C = WyckoffSite.get('c', SG221)
+WSITE_D = WyckoffSite.get('d', SG221)
 # partial f electrons
+with open(relpath('data/partial_f.txt')) as f:
+    PARTIAL_F_strs = [i.rstrip('\n') for i in f.readlines()]
+PARTIAL_F = {Element.get(i) for i in PARTIAL_F_strs}
+
 
 
 def upgs():
@@ -140,8 +144,8 @@ invper_max = [i for i in nonoxF if is_inv(i, 'max')]
 
 final_list = invper_max
 # get both types of inverse perovskites (searches for existance of certain wyckoff sites)
-type1 = {i for i in final_list if wsite_c in [j.wyckoff for j in i.sites]}
-type2 = {i for i in final_list if wsite_d in [j.wyckoff for j in i.sites]}
+type1 = {i for i in final_list if WSITE_C in [j.wyckoff for j in i.sites]}
+type2 = {i for i in final_list if WSITE_D in [j.wyckoff for j in i.sites]}
 # broken because of bug in qmpy.materials.structures.py definition of translate line 1462
 type2_transformed = {struct.recenter(struct[[i.wyckoff.symbol for i in struct.sites].index(u'b')],
  in_place = False, middle = False) for struct in type2}
