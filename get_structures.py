@@ -86,7 +86,7 @@ class StructureStats():
         if not self.done_to_python:
             self.to_python(output = False)
         if not self.done_get_valences:
-            self.valences = [self._get_pmg_valence[i] for i in self.pystructs]
+            self.valences = [self._get_pmg_valence(i) for i in self.pystructs]
             self.done_get_valences = True
         if output:
             return self.valences
