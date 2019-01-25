@@ -67,7 +67,7 @@ class StructureStats():
         self.coordinates = [[i.coord for i in s.atoms] for s in self.structs]
         self.pystructs = [pymatgen.Structure(self.lattices[i], self.species[i],
          self.coordinates[i]) for i in range(self.n)]
-        self.X = [i.X for i in self.species]
+        self.X = [[j.X for j in i] for i in self.species]
     def _get_pmg_valence(self, pystruct):
         """ Runs work for pymatgen valence code"""
         try:
