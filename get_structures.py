@@ -46,7 +46,7 @@ PARTIAL_F = {Element.get(i) for i in PARTIAL_F_strs}
 
 
 
-class structstats():
+class StructureStats():
     """Docstring here
 
     Bugs: 
@@ -54,41 +54,59 @@ class structstats():
     create a new instance if you want a new structure
     """
     def __init__(self, structs):
-        """ structs should be a list of structure objects """
+        """ structs should be a list of oqmd structure objects """
         self.structs = structs
         self.n = len(self.structs)
-    def to_python(self):
+        self.done_to_python = False
+        self.done_get_valences = False
+        self.done_invper_valences = False
+    def to_python(self, output = True):
         """ returns list of python structures """
-        self.lattices = [i.cell for i in self.structs]
-        self.species = [[j.species for j in s.atoms] for s in self.structs]
-        self.coordinates = [[i.coord for i in s.atoms] for s in self.structs]
-        self.pystruct = [pymatgen.Structure(self.lattices[i], self.species[i],
-         self.coordinates[i]) for i in range(self.n)]
-        return self.pystruct
+        if not self.done_to_python:
+            self.lattices = [i.cell for i in self.structs]
+            self.species = [[j.species for j in s.atoms] for s in self.structs]
+            self.coordinates = [[i.coord for i in s.atoms] for s in self.structs]
+            self.pystructs = [pymatgen.Structure(self.lattices[i], self.species[i],
+             self.coordinates[i]) for i in range(self.n)]
+            self.done_to_python = True
+        if output:
+            return self.pystructs
+    def _get_pmg_valence(self, pystruct):
+        """ Runs work for pymatgen valence code"""
+        try:
+            vs = BV.get_valences(pystruct)
+        except:
+            vs = None
+        return(vs)
+    def get_valences(self, output = True):
+        """
+        returns list of valences for each compound 
+        compounds that fail will have None instead
+        """
+        if not self.done_to_python:
+            self.to_python(output = False)
+        if not self.done_get_valences:
+            self.valences = [self._get_pmg_valence[i] for i in self.pystructs]
+            self.done_get_valences = True
+        if output:
+            return self.valences
+    def invper_valences(self, output = True):
+        """
+        Returns a list of inverse perovskites by X site valence charge > 0
+        """
+        if not self.done_get_valences:
+            self.get_valences(output = False)
+        if not self.done_invper_valences:
+            self.invper_valences = []
+            for i, valence in enumerate(self.valences):
+                if not valence is None:
+                    if scipy.stats.mode(valence, nan_policy = 'omit')[0][0] > 0:
+                        self.invper_valences.append(self.structs[i])
+            self.done_invper_valences = True
+        if output:
+            return self.invper_valences
 
-# Convert oqmd structure to pymatgen structure
-def pystruct(s):
-    lattice = s.cell
-    species = [i.species for i in s.atoms]
-    coordinates = [i.coord for i in s.atoms]
-    return pymatgen.Structure(lattice, species, coordinates)
 
-def getv(s, check_inverse = False):
-    """
-    check_inverse only returns true if mode(valences) > 0
-    """
-    pys = pystruct(s)
-    try:
-        vs = BV.get_valences(pys)
-    except:
-        vs = None
-    if check_inverse:
-        if vs is None: return False
-        elif scipy.stats.mode(vs, nan_policy = 'omit')[0][0] < 0:
-            return False
-        else: return True
-    else:
-        return vs
 
 def electro(element):
     return pymatgen.Specie(element).X
@@ -125,6 +143,32 @@ def is_inv(s, method = 'max'):
         return es[2] == es[0]
     else:
         raise ValueError('method must be either "min" or "max"')
+
+# Old functions
+# Convert oqmd structure to pymatgen structure
+def pystruct(s):
+    lattice = s.cell
+    species = [i.species for i in s.atoms]
+    coordinates = [i.coord for i in s.atoms]
+    return pymatgen.Structure(lattice, species, coordinates)
+
+def getv(s, check_inverse = False):
+    """
+    check_inverse only returns true if mode(valences) > 0
+    """
+    pys = pystruct(s)
+    try:
+        vs = BV.get_valences(pys)
+    except:
+        vs = None
+    if check_inverse:
+        if vs is None: return False
+        elif scipy.stats.mode(vs, nan_policy = 'omit')[0][0] < 0:
+            return False
+        else: return True
+    else:
+        return vs
+
 
 allstructperovtheory = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
 icsd = Structure.objects.filter(
@@ -171,4 +215,4 @@ type2_transformed = {struct.recenter(struct[[i.wyckoff.symbol for i in struct.si
 
 
 
-print('update')
+
