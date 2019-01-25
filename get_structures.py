@@ -57,20 +57,17 @@ class StructureStats():
         """ structs should be a list of oqmd structure objects """
         self.structs = structs
         self.n = len(self.structs)
-        self.done_to_python = False
         self.done_get_valences = False
         self.done_invper_valences = False
-    def to_python(self, output = True):
-        """ returns list of python structures """
-        if not self.done_to_python:
-            self.lattices = [i.cell for i in self.structs]
-            self.species = [[j.species for j in s.atoms] for s in self.structs]
-            self.coordinates = [[i.coord for i in s.atoms] for s in self.structs]
-            self.pystructs = [pymatgen.Structure(self.lattices[i], self.species[i],
-             self.coordinates[i]) for i in range(self.n)]
-            self.done_to_python = True
-        if output:
-            return self.pystructs
+        self._to_pymatgen()
+    def _to_pymatgen(self):
+        """ updates  """
+        self.lattices = [i.cell for i in self.structs]
+        self.species = [[j.species for j in s.atoms] for s in self.structs]
+        self.coordinates = [[i.coord for i in s.atoms] for s in self.structs]
+        self.pystructs = [pymatgen.Structure(self.lattices[i], self.species[i],
+         self.coordinates[i]) for i in range(self.n)]
+        self.X = [i.X for i in self.species]
     def _get_pmg_valence(self, pystruct):
         """ Runs work for pymatgen valence code"""
         try:
@@ -83,8 +80,6 @@ class StructureStats():
         returns list of valences for each compound 
         compounds that fail will have None instead
         """
-        if not self.done_to_python:
-            self.to_python(output = False)
         if not self.done_get_valences:
             self.valences = [self._get_pmg_valence(i) for i in self.pystructs]
             self.done_get_valences = True
