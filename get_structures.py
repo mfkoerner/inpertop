@@ -113,8 +113,11 @@ class StructureStats():
             return self.invper_valences
     def _elstats(self):
         """
-        Returns stats of electronegativity of s and electronegativity
-        [min, max, mode, [electronegativity]]
+        string_species is pymatgen Specie object
+        electronegativities is lists of electronegativities
+        emin is electronegativities min
+        emax is electronegativities max
+        emode is electronegativities mode
         """
         self.string_species = [[pymatgen.Specie(a.element.__str__()) for a in atoms] for atoms in self.atoms]
         self.electronegativities = [[i.X for i in string_species] for string_species in self.string_species]
