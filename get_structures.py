@@ -121,25 +121,25 @@ class StructureStats():
         """
         self.string_species = [[pymatgen.Specie(a.element.__str__()) for a in atoms] for atoms in self.atoms]
         self.electronegativities = [[i.X for i in string_species] for string_species in self.string_species]
-        self.emin = [min(i) for i in self.electronegativities]
-        self.emax = [max(i) for i in self.electronegativities]
-        self.emode = [scipy.stats.mode(i, nan_policy = 'omit')[0][0] for i in self.electronegativities]
+        self.emin = numpy.array([min(i) for i in self.electronegativities])
+        self.emax = numpy.array([max(i) for i in self.electronegativities])
+        self.emode = numpy.array([scipy.stats.mode(i, nan_policy = 'omit')[0][0] for i in self.electronegativities])
+    def is_inv(self, method = 'max'):
+        """
+        Checks if s is an inverse perovskite by method of electronegativity
+        if X-site is not highest electronegativity, returns True, otherwise false
+        if method = min, checks that X-site is minimum electronegativity
+        """
+        if method == 'max':
+            self.is_inv = numpy.not_equal(self.emax, self.emode)
+        elif method == 'min':
+            self.is_inv = numpy.equal(self.emin, self.emode)
+        else:
+            raise ValueError('method must be either "min" or "max"')
 
 
 
 
-
-def elstats(s):
-    """
-    Returns stats of electronegativity of s and electronegativity
-    [min, max, mode, [electronegativity]]
-    """
-    sspec = [pymatgen.Specie(i.element.__str__()) for i in s.atoms]
-    electronegativities = [i.X for i in sspec]
-    emin = min(electronegativities)
-    emax = max(electronegativities)
-    emode = scipy.stats.mode(electronegativities, nan_policy = 'omit')[0][0]
-    return [emin, emax, emode, electronegativities]
 
 def is_inv(s, method = 'max'):
     """
@@ -183,6 +183,20 @@ def getv(s, check_inverse = False):
 def electro(element):
     return pymatgen.Specie(element).X
 
+def elstats(s):
+    """
+    Returns stats of electronegativity of s and electronegativity
+    [min, max, mode, [electronegativity]]
+    """
+    sspec = [pymatgen.Specie(i.element.__str__()) for i in s.atoms]
+    electronegativities = [i.X for i in sspec]
+    emin = min(electronegativities)
+    emax = max(electronegativities)
+    emode = scipy.stats.mode(electronegativities, nan_policy = 'omit')[0][0]
+    return [emin, emax, emode, electronegativities]
+
+
+# other stuff
 
 allstructperovtheory = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
 icsd = Structure.objects.filter(
