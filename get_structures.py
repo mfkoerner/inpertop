@@ -69,6 +69,7 @@ class StructureStats():
         self.done_invper_valences = False
         self._to_pymatgen()
         self._elstats()
+        self._get_is_inv()
     def _to_pymatgen(self):
         """ updates  """
         self.lattices = [i.cell for i in self.structs]
@@ -124,7 +125,7 @@ class StructureStats():
         self.emin = numpy.array([min(i) for i in self.electronegativities])
         self.emax = numpy.array([max(i) for i in self.electronegativities])
         self.emode = numpy.array([scipy.stats.mode(i, nan_policy = 'omit')[0][0] for i in self.electronegativities])
-    def is_inv(self, method = 'max'):
+    def _get_is_inv(self, method = 'max'):
         """
         Checks if s is an inverse perovskite by method of electronegativity
         if X-site is not highest electronegativity, returns True, otherwise false
@@ -136,24 +137,12 @@ class StructureStats():
             self.is_inv = numpy.equal(self.emin, self.emode)
         else:
             raise ValueError('method must be either "min" or "max"')
+        self.inverse_perovskites = [self.structures[i] for i in range(self.n) if self.is_inv[i]]
 
 
 
 
 
-def is_inv(s, method = 'max'):
-    """
-    Checks if s is an inverse perovskite by method of electronegativity
-    if X-site is not highest electronegativity, returns True, otherwise false
-    if method = min, checks that X-site is minimum electronegativity
-    """
-    es = elstats(s)
-    if method == 'max':
-        return es[2] != es[1]
-    elif method == 'min':
-        return es[2] == es[0]
-    else:
-        raise ValueError('method must be either "min" or "max"')
 
 # Old functions
 # Convert oqmd structure to pymatgen structure
@@ -194,6 +183,19 @@ def elstats(s):
     emax = max(electronegativities)
     emode = scipy.stats.mode(electronegativities, nan_policy = 'omit')[0][0]
     return [emin, emax, emode, electronegativities]
+def is_inv(s, method = 'max'):
+    """
+    Checks if s is an inverse perovskite by method of electronegativity
+    if X-site is not highest electronegativity, returns True, otherwise false
+    if method = min, checks that X-site is minimum electronegativity
+    """
+    es = elstats(s)
+    if method == 'max':
+        return es[2] != es[1]
+    elif method == 'min':
+        return es[2] == es[0]
+    else:
+        raise ValueError('method must be either "min" or "max"')
 
 
 # other stuff
@@ -218,6 +220,8 @@ un53icsd221 = Structure.objects.filter(
 nonox = [ i for i in un53icsd221 if not 'O3' in i.__str__() ]
 # Knock out all with 3 Fluorine
 nonoxF = [ i for i in nonox if not 'F3' in i.__str__() ]
+
+
 nonoxFstr = [i.__str__() for i in nonoxF]
 
 #inverse perovskite, minimum requirement
