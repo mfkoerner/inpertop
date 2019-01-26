@@ -45,6 +45,14 @@ with open(relpath('data/partial_f.txt')) as f:
 PARTIAL_F = {Element.get(i) for i in PARTIAL_F_strs}
 
 
+def mode(s):
+    """
+    I don't know if nan_policy is producing weird results
+    for elements without an electronegativity value
+    """
+    return scipy.stats.mode([i.species for i in s.atoms], nan_policy = 'omit')[0][0].__str__()
+
+
 
 class StructureStats():
     """Docstring here
@@ -60,14 +68,15 @@ class StructureStats():
         self.done_get_valences = False
         self.done_invper_valences = False
         self._to_pymatgen()
+        self._elstats()
     def _to_pymatgen(self):
         """ updates  """
         self.lattices = [i.cell for i in self.structs]
+        self.atoms = [s.atoms for s in self.structs]
         self.species = [[j.species for j in s.atoms] for s in self.structs]
         self.coordinates = [[i.coord for i in s.atoms] for s in self.structs]
         self.pystructs = [pymatgen.Structure(self.lattices[i], self.species[i],
          self.coordinates[i]) for i in range(self.n)]
-        self.X = [[j.X for j in i] for i in self.species]
     def _get_pmg_valence(self, pystruct):
         """ Runs work for pymatgen valence code"""
         try:
@@ -75,6 +84,8 @@ class StructureStats():
         except:
             vs = None
         return(vs)
+    def _electro(self, element):
+        return pymatgen.Specie(element).X
     def get_valences(self, output = True):
         """
         returns list of valences for each compound 
@@ -100,18 +111,21 @@ class StructureStats():
             self.done_invper_valences = True
         if output:
             return self.invper_valences
+    def _elstats(self):
+        """
+        Returns stats of electronegativity of s and electronegativity
+        [min, max, mode, [electronegativity]]
+        """
+        self.string_species = [[pymatgen.Specie(a.element.__str__()) for a in atoms] for atoms in self.atoms]
+        self.electronegativities = [[i.X for i in string_species] for string_species in self.string_species]
+        self.emin = [min(i) for i in self.electronegativities]
+        self.emax = [max(i) for i in self.electronegativities]
+        self.emode = [scipy.stats.mode(i, nan_policy = 'omit')[0][0] for i in self.electronegativities]
+        return [[emin[i], emax[i], emode[i], self.electronegativities[i]] for i in range(self.n)]
 
 
 
-def electro(element):
-    return pymatgen.Specie(element).X
 
-def mode(s):
-    """
-    I don't know if nan_policy is producing weird results
-    for elements without an electronegativity value
-    """
-    return scipy.stats.mode([i.species for i in s.atoms], nan_policy = 'omit')[0][0].__str__()
 
 def elstats(s):
     """
@@ -163,6 +177,9 @@ def getv(s, check_inverse = False):
         else: return True
     else:
         return vs
+
+def electro(element):
+    return pymatgen.Specie(element).X
 
 
 allstructperovtheory = Structure.objects.filter(entry__meta_data__value__contains='perovskite', label='input')
