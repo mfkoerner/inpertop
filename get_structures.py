@@ -137,7 +137,7 @@ class StructureStats():
             self.is_inv = numpy.equal(self.emin, self.emode)
         else:
             raise ValueError('method must be either "min" or "max"')
-        self.inverse_perovskites = [self.structures[i] for i in range(self.n) if self.is_inv[i]]
+        self.inverse_perovskites = [self.structs[i] for i in range(self.n) if self.is_inv[i]]
 
 
 
