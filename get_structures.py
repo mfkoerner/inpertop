@@ -121,7 +121,6 @@ class StructureStats():
         self.emin = [min(i) for i in self.electronegativities]
         self.emax = [max(i) for i in self.electronegativities]
         self.emode = [scipy.stats.mode(i, nan_policy = 'omit')[0][0] for i in self.electronegativities]
-        return [[emin[i], emax[i], emode[i], self.electronegativities[i]] for i in range(self.n)]
 
 
 
