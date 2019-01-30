@@ -149,7 +149,7 @@ class InversePerovskiteBonuses():
         """
         sets self.ordered elements to be in order X A B
         """
-        if WSITE_C in self.wyckoffsites:
+        if   WSITE_C in self.wyckoffsites:
             self.ordered_elements = self._get_elements_ordered_by_wyckoff_sites(['c','a','b'])
         elif WSITE_D in self.wyckoffsites:
             self.ordered_elements = self._get_elements_ordered_by_wyckoff_sites(['d','b','a'])
