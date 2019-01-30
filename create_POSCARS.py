@@ -12,7 +12,7 @@ from filter_structures import final_list
 import os
 from qmpy import io
 
-for i in fianl_list:
+for i in final_list:
     print(gs.InversePerovskiteBonuses(i).label)
 
 bonuses = [gs.InversePerovskiteBonuses(i) for i in final_list]
