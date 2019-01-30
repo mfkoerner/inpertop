@@ -12,9 +12,6 @@ from filter_structures import final_list
 import os
 from qmpy import io
 
-for i in final_list:
-    print(gs.InversePerovskiteBonuses(i).label)
-
 bonuses = [gs.InversePerovskiteBonuses(i) for i in final_list]
 
 # make base directories
@@ -25,5 +22,5 @@ bonuses = [gs.InversePerovskiteBonuses(i) for i in final_list]
 for bonus in bonuses:
     io.write(bonus.structure,
         filename='/home/oqmd/pod/mkoerner/inpertop_data/icsd/I{}/POSCAR'.format(bonus.idstr),
-        comments = bonus.label
+        comments = '{} ICSD structure'.format(bonus.label)
         )
