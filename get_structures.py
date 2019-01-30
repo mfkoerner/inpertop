@@ -240,7 +240,7 @@ class InversePerovskiteBonuses():
         else:
             raise ValueError("need simple cubic inverse perovskite")
         label = '{}3{}{}'.format(*[i.name for i in self.ordered_elements])
-        idnum = long(''.join([float(i.z) for i in self.ordered_elements]))
+        idnum = long(''.join([str(i.z) for i in self.ordered_elements]))
         return(label, idnum)
 
 
