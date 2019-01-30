@@ -33,3 +33,7 @@ nonoxF = [ i for i in nonox if not 'F3' in i.name ]
 #Filter out atoms with most electronegativity in X site
 invper_max = [i for i in nonoxF if gs.is_inv(i, 'max')]
 
+# filter out F block electrons
+invper_nof = [i for i in invper_max if len(gs.PARTIAL_F.intersection(set(i.elements))) == 0]
+
+final_list = invper_nof
