@@ -12,6 +12,7 @@ from filter_structures import final_list
 import os
 from qmpy import io
 
+print(final_list)
 bonuses = [gs.InversePerovskiteBonuses(i) for i in final_list]
 
 # make base directories
