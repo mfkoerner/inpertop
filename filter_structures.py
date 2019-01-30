@@ -16,7 +16,7 @@ El_O = Element.get('O')
 El_F = Element.get('F')
 
 # Get all unique icsd entries with 5 atoms and 3 unique species in spacegroup 221
-un53icsd221 = Structure.objects.filter(
+un53icsd221 = gs.Structure.objects.filter(
     entry__meta_data__value='icsd', 
     label='input',
     natoms = 5,
