@@ -9,6 +9,8 @@ Created on Wed Jan 30 14:33:43 2019
 
 import get_structures as gs
 from qmpy.materials.element import Element
+from django.db.models import F
+
 
 
 # Useful objects

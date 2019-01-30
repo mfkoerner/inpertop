@@ -22,7 +22,6 @@ import numpy
 import scipy.stats
 import os
 import sys
-from django.db.models import F
 
 # relative paths
 import os
