@@ -203,14 +203,14 @@ WSITE_B = WyckoffSite.get('b', SG221)
 WSITE_C = WyckoffSite.get('c', SG221)
 WSITE_D = WyckoffSite.get('d', SG221)
 
-class BetterStructure(Structure):
+class BetterStructure():
     """
     Adding more features to a qmpy structure
     initialises from a qmpy structure
     """
     def __init__(self, s):
-        self = s
-        self.wyckoffsites = [i.wyckoff for i in s.sites]
+        self.structure = s
+        self.wyckoffsites = [i.wyckoff for i in self.structure.sites]
     def get_element_by_site(self, site):
         """
         gets atom at lettered site
@@ -221,12 +221,12 @@ class BetterStructure(Structure):
         element = self.structure.atoms[wyckoffsites.where(wsite)].element
         return element
 
-    def get_elements_ordered_by_wyckoff_site(s, sites):
+    def get_elements_ordered_by_wyckoff_site(self, sites):
         """
         returns list of elements ordered by list of strings
         called sites that represents the wyckoff sites
         """
-        ordered_elements = [get_element_by_site(s, site) for site in sites]
+        ordered_elements = [self.get_element_by_site(site) for site in sites]
         return ordered_elements
 
     # def label_by_sites(s):
