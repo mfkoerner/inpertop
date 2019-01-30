@@ -226,7 +226,7 @@ class InversePerovskiteBonuses():
 
     def label_by_sites(self):
         """
-        Returns: label, idnum
+        Returns: label, idstr
         assigns label and id based on sites
         label goes X3AB
         id goes XXAABB
@@ -239,8 +239,10 @@ class InversePerovskiteBonuses():
             self.ordered_elements = self.get_elements_ordered_by_wyckoff_sites(['d','b','a'])
         else:
             raise ValueError("need simple cubic inverse perovskite")
-        label = '{}3{}{}'.format(*[i.name for i in self.ordered_elements])
-        idnum = long(''.join([str(i.z) for i in self.ordered_elements]))
+        label = '{}3{}{}'.format(*[i.symbol for i in self.ordered_elements])
+        idstr = '{:02d}{:02d}{:02d}'.format(
+            *[str(i.z) for i in self.ordered_elements]
+            )
         return(label, idnum)
 
 
