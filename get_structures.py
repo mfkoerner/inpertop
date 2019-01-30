@@ -197,13 +197,8 @@ def is_inv(s, method = 'max'):
     else:
         raise ValueError('method must be either "min" or "max"')
 
-SG221 = Spacegroup.get(221)
-WSITE_A = WyckoffSite.get('a', SG221)
-WSITE_B = WyckoffSite.get('b', SG221)
-WSITE_C = WyckoffSite.get('c', SG221)
-WSITE_D = WyckoffSite.get('d', SG221)
 
-class BetterStructure():
+class InversePerovskiteBonuses():
     """
     Adding more features to a qmpy structure
     initialises from a qmpy structure
@@ -221,7 +216,7 @@ class BetterStructure():
         element = self.structure.atoms[self.wyckoffsites.index(wsite)].element
         return element
 
-    def get_elements_ordered_by_wyckoff_site(self, sites):
+    def get_elements_ordered_by_wyckoff_sites(self, sites):
         """
         returns list of elements ordered by list of strings
         called sites that represents the wyckoff sites
@@ -229,20 +224,25 @@ class BetterStructure():
         ordered_elements = [self.get_element_by_site(site) for site in sites]
         return ordered_elements
 
-    # def label_by_sites(s):
-    #     """
-    #     assigns label and id based on sites
-    #     label goes X3AB
-    #     id goes XXAABB
-    #     may bug out if not simple cubic inverse perovskite
-    #     may instead error out
-    #     """
-    #     if WSITE_C in self.wyckoffsites:
-    #         ordered_elements = get_elements_ordered_by_wyckoff_site(s, ['a','b','c'])
-    #     elif WSITE_D in self.wyckoffsites:
+    def label_by_sites(self):
+        """
+        Returns: label, idnum
+        assigns label and id based on sites
+        label goes X3AB
+        id goes XXAABB
+        may bug out if not simple cubic inverse perovskite
+        may instead error out
+        """
+        if WSITE_C in self.wyckoffsites:
+            self.ordered_elements = self.get_elements_ordered_by_wyckoff_sites(['c','a','b'])
+        elif WSITE_D in self.wyckoffsites:
+            self.ordered_elements = self.get_elements_ordered_by_wyckoff_sites(['d','b','a'])
+        else:
+            raise ValueError("need simple cubic inverse perovskite")
+        label = '{}3{}{}'.format(*[i.name for i in self.ordered_elements])
+        idnum = long(''.join([float(i.z) for i in self.ordered_elements]))
+        return(label, idnum)
 
-    #     else:
-    #         raise ValueError("need simple cubic inverse perovskite")
 
 
 # other stuff
