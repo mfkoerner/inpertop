@@ -218,7 +218,7 @@ class BetterStructure():
         """
         spacegroup = self.structure.spacegroup
         wsite = WyckoffSite.get(site, spacegroup)
-        element = self.structure.atoms[wyckoffsites.where(wsite)].element
+        element = self.structure.atoms[self.wyckoffsites.where(wsite)].element
         return element
 
     def get_elements_ordered_by_wyckoff_site(self, sites):
