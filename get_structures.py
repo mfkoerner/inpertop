@@ -241,7 +241,7 @@ class InversePerovskiteBonuses():
             raise ValueError("need simple cubic inverse perovskite")
         label = '{}3{}{}'.format(*[i.symbol for i in self.ordered_elements])
         idstr = '{:02d}{:02d}{:02d}'.format(
-            *[str(i.z) for i in self.ordered_elements]
+            *[i.z for i in self.ordered_elements]
             )
         return(label, idnum)
 
