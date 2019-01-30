@@ -202,11 +202,12 @@ class InversePerovskiteBonuses():
     """
     Adding more features to a qmpy structure
     initialises from a qmpy structure
+    current main purpose is to label_by_sites
     """
     def __init__(self, s):
         self.structure = s
         self.wyckoffsites = [i.wyckoff for i in self.structure.sites]
-    def get_element_by_site(self, site):
+    def _get_element_by_site(self, site):
         """
         gets atom at lettered site
         for given structure
@@ -216,12 +217,12 @@ class InversePerovskiteBonuses():
         element = self.structure.atoms[self.wyckoffsites.index(wsite)].element
         return element
 
-    def get_elements_ordered_by_wyckoff_sites(self, sites):
+    def _get_elements_ordered_by_wyckoff_sites(self, sites):
         """
         returns list of elements ordered by list of strings
         called sites that represents the wyckoff sites
         """
-        ordered_elements = [self.get_element_by_site(site) for site in sites]
+        ordered_elements = [self._get_element_by_site(site) for site in sites]
         return ordered_elements
 
     def label_by_sites(self):
@@ -234,9 +235,9 @@ class InversePerovskiteBonuses():
         may instead error out
         """
         if WSITE_C in self.wyckoffsites:
-            self.ordered_elements = self.get_elements_ordered_by_wyckoff_sites(['c','a','b'])
+            self.ordered_elements = self._get_elements_ordered_by_wyckoff_sites(['c','a','b'])
         elif WSITE_D in self.wyckoffsites:
-            self.ordered_elements = self.get_elements_ordered_by_wyckoff_sites(['d','b','a'])
+            self.ordered_elements = self._get_elements_ordered_by_wyckoff_sites(['d','b','a'])
         else:
             raise ValueError("need simple cubic inverse perovskite")
         label = '{}3{}{}'.format(*[i.symbol for i in self.ordered_elements])
