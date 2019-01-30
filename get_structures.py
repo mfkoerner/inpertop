@@ -243,7 +243,7 @@ class InversePerovskiteBonuses():
         idstr = '{:02d}{:02d}{:02d}'.format(
             *[i.z for i in self.ordered_elements]
             )
-        return(label, idnum)
+        return(label, idstr)
 
 
 
