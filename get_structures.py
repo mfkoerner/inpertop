@@ -119,12 +119,15 @@ class InversePerovskiteBonuses():
     ordered_elements:   elements in order X A B
     label:              X3AB
     idstr:              periodic numbers of order XXAABB
+    shifted_structure:  structure where coords are shifted so that
+                        A is at 0,0,0
     """
     def __init__(self, s):
         self.structure = s
         self.wyckoffsites = [i.wyckoff for i in self.structure.sites]
         self._set_ordered_elements()
         self._set_label_by_sites()
+        self._set_shifted_structure()
 
 
     def _get_element_by_site(self, site):
@@ -169,6 +172,17 @@ class InversePerovskiteBonuses():
         self.idstr = '{:02d}{:02d}{:02d}'.format(
             *[i.z for i in self.ordered_elements]
             )
+
+    def _set_shifted_structure(self):
+        """
+        creates shifted structure which makes perovskites correct form
+        """
+        self.shifted_structure = self.structure.copy()
+        if WSITE_D in self.wyckoffsites:
+            self.shifted_structure.translate([.5,.5,.5],
+                cartesian = False, in_place = True)
+
+
 
 
 

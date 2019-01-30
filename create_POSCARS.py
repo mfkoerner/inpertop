@@ -20,7 +20,7 @@ bonuses = [gs.InversePerovskiteBonuses(i) for i in final_list]
 
 # create POSCAR files
 for bonus in bonuses:
-    io.write(bonus.structure,
+    io.write(bonus.shifted_structure,
         filename='/home/oqmd/pod/mkoerner/inpertop_data/icsd/I{}/POSCAR'.format(bonus.idstr),
         comments = '{} ICSD structure'.format(bonus.label)
         )
