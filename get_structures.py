@@ -114,10 +114,20 @@ class InversePerovskiteBonuses():
     Adding more features to a qmpy structure
     initialises from a qmpy structure
     current main purpose is to label_by_sites
+
+    ### bonuses ###
+    wyckoffsites:       list of wyckoff sites
+    ordered_elements:   elements in order X A B
+    label:              X3AB
+    idstr:              periodic numbers of order XXAABB
     """
     def __init__(self, s):
         self.structure = s
         self.wyckoffsites = [i.wyckoff for i in self.structure.sites]
+        self._set_ordered_elements()
+        self._set_label_by_sites()
+
+
     def _get_element_by_site(self, site):
         """
         gets atom at lettered site
@@ -136,7 +146,18 @@ class InversePerovskiteBonuses():
         ordered_elements = [self._get_element_by_site(site) for site in sites]
         return ordered_elements
 
-    def label_by_sites(self):
+    def _set_ordered_elements(self):
+        """
+        sets self.ordered elements to be in order X A B
+        """
+        if WSITE_C in self.wyckoffsites:
+            self.ordered_elements = self._get_elements_ordered_by_wyckoff_sites(['c','a','b'])
+        elif WSITE_D in self.wyckoffsites:
+            self.ordered_elements = self._get_elements_ordered_by_wyckoff_sites(['d','b','a'])
+        else:
+            raise ValueError("need simple cubic inverse perovskite")
+
+    def _set_label_by_sites(self):
         """
         Returns: label, idstr
         assigns label and id based on sites
@@ -145,17 +166,10 @@ class InversePerovskiteBonuses():
         may bug out if not simple cubic inverse perovskite
         may instead error out
         """
-        if WSITE_C in self.wyckoffsites:
-            self.ordered_elements = self._get_elements_ordered_by_wyckoff_sites(['c','a','b'])
-        elif WSITE_D in self.wyckoffsites:
-            self.ordered_elements = self._get_elements_ordered_by_wyckoff_sites(['d','b','a'])
-        else:
-            raise ValueError("need simple cubic inverse perovskite")
-        label = '{}3{}{}'.format(*[i.symbol for i in self.ordered_elements])
-        idstr = '{:02d}{:02d}{:02d}'.format(
+        self.label = '{}3{}{}'.format(*[i.symbol for i in self.ordered_elements])
+        self.idstr = '{:02d}{:02d}{:02d}'.format(
             *[i.z for i in self.ordered_elements]
             )
-        return(label, idstr)
 
 
 
