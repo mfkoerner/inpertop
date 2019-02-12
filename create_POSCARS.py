@@ -18,7 +18,7 @@ bonuses = [gs.InversePerovskiteBonuses(i) for i in final_list]
 # for bonus in bonuses:
 #     os.mkdir('/home/oqmd/pod/mkoerner/inpertop_data/icsd/I{}'.format(bonus.idstr))
 
-# create POSCAR files
+# create POSCAR files (using shifted_structure means that A site is always at 0,0,0)
 for bonus in bonuses:
     io.write(bonus.shifted_structure,
         filename='/home/oqmd/pod/mkoerner/inpertop_data/icsd/I{}/POSCAR'.format(bonus.idstr),
