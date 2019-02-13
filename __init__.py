@@ -1,3 +1,2 @@
-import get_structure
 import incar_preferances
 import tracking_interface
