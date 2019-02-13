@@ -12,7 +12,7 @@ Created on Wed Feb 13 13:25:11 2019
 
 from pymatgen.io.vasp import Incar
 
-class PreferencedIncar(Incar):
+class PrefIncar(Incar):
     """
     Modifies the pymatgen Incar to include set functions that
      are for specific types of runs in Seshadri Group
