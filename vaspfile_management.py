@@ -11,6 +11,9 @@ Created on Wed Feb 13 13:25:11 2019
 
 
 from pymatgen.io.vasp import Incar
+from shutil import copy
+from os.path import join as j
+
 
 class PrefIncar(Incar):
     """
@@ -62,7 +65,14 @@ class PrefIncar(Incar):
         self['ICHARG'] = 11
         self['SIGMA'] = 0.002
 
-
+def copy_inputs(olddir, newdir):
+    """
+    copies POSCAR, POTCAR, INCAR, KPOINTS from olddir to newdir
+    """
+    copy(j(olddir, 'POSCAR'), j(newdir, 'POSCAR'))
+    copy(j(olddir, 'POTCAR'), j(newdir, 'POTCAR'))
+    copy(j(olddir, 'INCAR'), j(newdir, 'INCAR'))
+    copy(j(olddir, 'KPOINTS'), j(newdir, 'KPOINTS'))
 
 
 
