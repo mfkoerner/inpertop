@@ -44,6 +44,9 @@ class PrefIncar(Incar):
         self.remove_tag('SIGMA')
 
     def set_static(self):
+        """
+        Remember to copy CONTCAR to POSCAR
+        """
         self['NSW'] = 0
         self['SIGMA'] = 0.002
         self['LORBIT'] = 12
