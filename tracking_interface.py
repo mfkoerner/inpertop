@@ -90,6 +90,17 @@ class interface():
         if update:
             self._update_recent()
 
+    def full_update_entry(self, entry, column, value, record_dir = '.'):
+        """
+        reads the csv, updates entry, writes data, and records changes
+        THIS MIGHT STILL FAIL IF TWO CALLS ARE TOO CLOSE IN TIME TO EACH OTHER
+        """
+        self._read()
+        self.update_entry(entry, column, value)
+        self.write()
+        self.record_changes(directory = record_dir)
+
+
 
 
 
