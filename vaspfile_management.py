@@ -11,6 +11,7 @@ Created on Wed Feb 13 13:25:11 2019
 
 
 from pymatgen.io.vasp import Incar
+from pymatgen.io.vasp.outputs import Procar
 from shutil import copy
 from os.path import join as j
 
@@ -64,6 +65,19 @@ class PrefIncar(Incar):
         self['LORBIT'] = 12
         self['ICHARG'] = 11
         self['SIGMA'] = 0.002
+
+    def increase_NBANDS(self, staticpath = '../static', factor = 2):
+        """
+        multiplies NBANDS from staticpath/PROCAR by factor
+        """
+        ogbands = self.get_NBANDS(staticpath)
+        newbands = factor * ogbands
+        self['NBANDS'] = newbands
+
+    def get_NBANDS(self, rundir='.'):
+        filepath = j(rundir, 'PROCAR')
+        pro = Procar(filepath)
+        return pro.nbands
 
 def copy_inputs(olddir, newdir):
     """

@@ -92,13 +92,14 @@ class interface():
 
     def full_update_entry(self, entry, column, value, record_dir = '.'):
         """
-        reads the csv, updates entry, writes data, and records changes
-        THIS MIGHT STILL FAIL IF TWO CALLS ARE TOO CLOSE IN TIME TO EACH OTHER
+        reads the csv, updates entry, writes data, and records changes (commented out)
+        THIS MIGHT STILL FAIL IF TWO CALLS ARE TOO CLOSE IN TIME TO EACH OTHER,
+         but it is the best shot we have with the current method
         """
         self._read()
         self.update_entry(entry, column, value)
         self.write()
-        self.record_changes(directory = record_dir)
+        # self.record_changes(directory = record_dir)
 
 
 
