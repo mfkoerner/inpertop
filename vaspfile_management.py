@@ -47,10 +47,17 @@ class PrefIncar(Incar):
         self['IBRION'] = 3
         self.remove_tag('SIGMA')
 
+    def unset_relaxation(self):
+        """ Removes tags associated with relaxation runs """
+        self.remove_tag('IBRION')
+        self.remove_tag('EDIFFG')
+        self.remove_tag('NSW')
+
     def set_static(self):
         """
         Remember to copy CONTCAR to POSCAR
         """
+        self.unset_relaxation()
         self['NSW'] = 0
         self['SIGMA'] = 0.002
         self['LORBIT'] = 12
@@ -61,10 +68,26 @@ class PrefIncar(Incar):
         Need to create correct KPOINTS
         Need to copy over CHGCAR from static run
         """
+        self.unset_relaxation()
         self['ISMEAR'] = 0
         self['LORBIT'] = 12
         self['ICHARG'] = 11
         self['SIGMA'] = 0.002
+
+    def set_magnetic(self):
+        """
+        should come from a static run that has both CHGCAR and wavecar
+        Can be used in combination with set_band to create a band structure run
+        """
+        self.unset_relaxation()
+        self['ISPIN'] = 2   # spin polarized calculation
+        self['ICHARG'] = 1  # use CHGCAR from previous
+
+    def set_wavecar(self, value = True):
+        """
+        Turns on wavecar generation by default
+        """
+        self['LWAVE'] = value
 
     def increase_NBANDS(self, staticpath = '../static', factor = 2):
         """
