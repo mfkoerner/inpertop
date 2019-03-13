@@ -12,6 +12,7 @@ Created on Wed Feb 13 13:25:11 2019
 
 from pymatgen.io.vasp import Incar
 from pymatgen.io.vasp.outputs import Procar
+from pymatgen.core import periodic_table as pt
 from shutil import copy
 from os.path import join as j
 
@@ -111,6 +112,17 @@ def copy_inputs(olddir, newdir):
     copy(j(olddir, 'INCAR'), j(newdir, 'INCAR'))
     copy(j(olddir, 'KPOINTS'), j(newdir, 'KPOINTS'))
 
+def ztostr(z):
+    return pt.get_el_sp(z).name
+
+def get_name(matid):
+    Xz = matid[1:3]
+    Az = matid[3:5]
+    Bz = matid[5:7]
+    X = ztostr(Xz)
+    A = ztostr(Az)
+    B = ztostr(Bz)
+    return(r'{}$_3${}{}'.format(X, A, B))
 
 
 
