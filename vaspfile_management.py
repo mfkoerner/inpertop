@@ -100,6 +100,13 @@ class PrefIncar(Incar):
         self['ICHARG'] = 1  # use CHGCAR from previous
         self['MAGMOM'] = self.get_POSCAR_mag_init(rundir = staticpath)
 
+    def set_SOC(self):
+        """
+        Remember to run this using vasp.ncl
+        Start from static run with both CHGCAR and wavecar
+        """
+        
+
 
     def set_wavecar(self, value = True):
         """
