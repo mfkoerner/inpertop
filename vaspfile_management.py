@@ -29,9 +29,6 @@ MAGSET = {'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Y',
 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr', 'Rf', 
 'Db', 'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', 'Cn'}
 
-with open('magset.txt') as f:
-    MAGSET = {i.rstrip('\n') for i in f.readlines()}
-
 
 class PrefIncar(Incar):
     """
