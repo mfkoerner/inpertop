@@ -123,6 +123,9 @@ class PrefIncar(Incar):
         if use_CHGCAR:
             self.start_from_CHGCAR()
         self['LNONCOLLINEAR'] = True
+        self['ISPIN'] = 2
+        self['MAGMOM'] = self.get_3d_POSCAR_mag_init(rundir = rundir)
+
 
 
     def set_SOC(self, use_CHGCAR = True):
@@ -157,16 +160,34 @@ class PrefIncar(Incar):
         return pro.nbands
 
     def get_POSCAR_atoms(self, rundir = '.'):
+        """
+        Returns array of POSCAR atoms by order in POSCAR
+        ex: ['A', 'X', 'X', 'X', 'B']
+        """
         filepath = j(rundir, 'POSCAR')
         pos = Poscar.from_file(filepath)
         atoms = repeated_list(pos.site_symbols, pos.natoms)
         return atoms
 
     def get_POSCAR_mag_init(self, rundir = '.', default_value = 3.0):
+        """
+        returns array of 3.0 and 0.0 for magnetic vs nonmagnetic atoms in POSCAR
+        """
         atoms = self.get_POSCAR_atoms(rundir = rundir)
         is_magnetic = [i in MAGSET for i in atoms]
         mag_init = [i*default_value for i in is_magnetic]
         return mag_init
+
+    def get_3d_POSCAR_mag_init(self, rundir = '.', default_value = 3):
+        """
+        Returns 3d version of mag_init for use in noncollinear runs
+        """
+        mag_init = self.get_POSCAR_mag_init(rundir = rundir,
+            default_value = default_value)
+        mag_3d_init = [0.0 for i in range(len(mag_init) * 3)]
+        for i in range(len(mag_init)):
+            mag_3d_init[3*i] = mag_init[i]
+        return mag_3d_init
 
     def is_compound_magnetic(self, rundir = '.'):
         mag_init = self.get_POSCAR_mag_init(rundir = rundir)
