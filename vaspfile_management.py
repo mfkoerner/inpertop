@@ -55,7 +55,17 @@ class PrefIncar(Incar):
         self['ISMEAR'] = -5
         self['LMAXMIX'] = 6
 
+    def start_from_CHGCAR(self):
+        """
+        Now this is used for magnetic and SOC instead of forcing it
+        """
+        self['ICHARG'] = 1
+
     def set_full_relax(self):
+        """
+        Always run this as the last move since many of the other ones
+         specifically unset relaxation
+        """
         self['NSW'] = 30
         self['EDIFFG'] = -1e-3
         self['IBRION'] = 3
@@ -90,24 +100,41 @@ class PrefIncar(Incar):
         self['SIGMA'] = 0.002
         self['LWAVE'] = False
 
-    def set_magnetic(self, rundir = '.'):
+    def set_magnetic(self, rundir = '.', use_CHGCAR = True):
         """
         should come from a static run that has both CHGCAR and wavecar
         Can be used in combination with set_band to create a band structure run
         Make sure that POSCAR is copied before running set_magnetic
+        THIS ONLY WORKS FOR COLINNEAR VASP, for noncolinnear use set_magnetic_ncl
         """
         self.unset_relaxation()
-        self['ISPIN'] = 2   # spin polarized calculation
-        self['ICHARG'] = 1  # use CHGCAR from previous
+        if use_CHGCAR:
+            self.start_from_CHGCAR()
+        self['ISPIN'] = 2  # split polarization
         self['MAGMOM'] = self.get_POSCAR_mag_init(rundir = rundir)
 
-    def set_SOC(self):
+    def set_magnetic_ncl(self, rundir = '.', use_CHGCAR = True):
         """
+        This creates a magnetic noncolinnear run
         Remember to run this using vasp.ncl
-        Start from static run with both CHGCAR and wavecar
+        start from static run with both CHGCAR and WAVECAR if use_CHGCAR is true
         """
         self.unset_relaxation()
-        self.set_magnetic()
+        if use_CHGCAR:
+            self.start_from_CHGCAR()
+        self['LNONCOLLINEAR'] = True
+
+
+    def set_SOC(self, use_CHGCAR = True):
+        """
+        Remember to run this using vasp.ncl
+        Start from static run with both CHGCAR and WAVECAR
+        """
+        self.unset_relaxation()
+        if use_CHGCAR:
+            self.start_from_CHGCAR()
+        self['LSORBIT'] = True
+        self['LNONCOLLINEAR'] = True
 
 
     def set_wavecar(self, value = True):
