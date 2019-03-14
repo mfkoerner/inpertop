@@ -75,6 +75,7 @@ class PrefIncar(Incar):
         self['NSW'] = 0
         self['SIGMA'] = 0.002
         self['LORBIT'] = 12
+        self['LWAVE'] = True
 
     def set_band(self):
         """
