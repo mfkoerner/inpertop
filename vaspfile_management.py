@@ -17,8 +17,18 @@ from shutil import copy
 from os.path import join as j
 
 
-with open('magset_z.txt') as f:
-    MAGSET_Z = {int(i.rstrip('\n')) for i in f.readlines()}
+MAGSET_Z = {21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 39, 40, 41, 42, 43, 44, 
+45, 46, 47, 48, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
+ 72, 73, 74, 75, 76, 77, 78, 79, 80, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 
+ 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112}
+
+MAGSET = {'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Y', 
+'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', 'La', 'Ce', 'Pr', 
+'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 
+'Hf', 'Ta', 'W', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', 'Ac', 'Th', 'Pa', 'U', 
+'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr', 'Rf', 
+'Db', 'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', 'Cn'}
+
 with open('magset.txt') as f:
     MAGSET = {i.rstrip('\n') for i in f.readlines()}
 
