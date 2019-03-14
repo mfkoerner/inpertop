@@ -11,7 +11,7 @@ Created on Wed Feb 13 13:25:11 2019
 
 
 from pymatgen.io.vasp import Incar
-from pymatgen.io.vasp.outputs import Procar
+from pymatgen.io.vasp.outputs import Procar, Poscar
 from pymatgen.core import periodic_table as pt
 from shutil import copy
 from os.path import join as j
@@ -19,6 +19,8 @@ from os.path import join as j
 
 with open('magset_z.txt') as f:
     MAGSET_Z = {int(i.rstrip('\n')) for i in f.readlines()}
+with open('magset.txt') as f:
+    MAGSET = {i.rstrip('\n') for i in f.readlines()}
 
 
 class PrefIncar(Incar):
@@ -79,7 +81,7 @@ class PrefIncar(Incar):
         self['ICHARG'] = 11
         self['SIGMA'] = 0.002
 
-    def set_magnetic(self):
+    def set_magnetic(self, staticpath = '../static'):
         """
         should come from a static run that has both CHGCAR and wavecar
         Can be used in combination with set_band to create a band structure run
@@ -87,6 +89,8 @@ class PrefIncar(Incar):
         self.unset_relaxation()
         self['ISPIN'] = 2   # spin polarized calculation
         self['ICHARG'] = 1  # use CHGCAR from previous
+        self['MAGMOM'] = self.get_POSCAR_mag_init(rundir = staticpath)
+
 
     def set_wavecar(self, value = True):
         """
@@ -106,6 +110,23 @@ class PrefIncar(Incar):
         filepath = j(rundir, 'PROCAR')
         pro = Procar(filepath)
         return pro.nbands
+
+    def get_POSCAR_atoms(self, rundir = '.'):
+        filepath = j(rundir, 'POSCAR')
+        pos = Poscar.from_file(filepath)
+        atoms = repeated_list(pos.site_symbols, pos.natoms)
+        return atoms
+
+    def get_POSCAR_mag_init(self, rundir = '.', default_value = 3.0):
+        atoms = self.get_POSCAR_atoms(rundir = rundir)
+        is_magnetic = [i in MAGSET for i in atoms]
+        mag_init = [i*default_value for i in is_magnetic]
+        return mag_init
+
+    def is_compound_magnetic(self, rundir = '.'):
+        mag_init = self.get_POSCAR_mag_init(rundir = rundir)
+        any_magnetic = sum(mag_init) > 0
+        return any_magnetic
 
 def copy_inputs(olddir, newdir):
     """
@@ -128,7 +149,12 @@ def get_name(matid):
     B = ztostr(Bz)
     return(r'{}$_3${}{}'.format(X, A, B))
 
-
+def repeated_list(names, nums):
+    out = []
+    for i, num in enumerate(nums):
+        for j in range(num):
+            out.append(names[i])
+    return out
 
 
 
