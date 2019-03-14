@@ -90,22 +90,24 @@ class PrefIncar(Incar):
         self['SIGMA'] = 0.002
         self['LWAVE'] = False
 
-    def set_magnetic(self, staticpath = '../static'):
+    def set_magnetic(self, rundir = '.'):
         """
         should come from a static run that has both CHGCAR and wavecar
         Can be used in combination with set_band to create a band structure run
+        Make sure that POSCAR is copied before running set_magnetic
         """
         self.unset_relaxation()
         self['ISPIN'] = 2   # spin polarized calculation
         self['ICHARG'] = 1  # use CHGCAR from previous
-        self['MAGMOM'] = self.get_POSCAR_mag_init(rundir = staticpath)
+        self['MAGMOM'] = self.get_POSCAR_mag_init(rundir = rundir)
 
     def set_SOC(self):
         """
         Remember to run this using vasp.ncl
         Start from static run with both CHGCAR and wavecar
         """
-        
+        self.unset_relaxation()
+        self.set_magnetic()
 
 
     def set_wavecar(self, value = True):
