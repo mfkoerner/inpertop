@@ -17,6 +17,10 @@ from shutil import copy
 from os.path import join as j
 
 
+with open('magset_z.txt') as f:
+    MAGSET_Z = {int(i.rstrip('\n')) for i in f.readlines()}
+
+
 class PrefIncar(Incar):
     """
     Modifies the pymatgen Incar to include set functions that
