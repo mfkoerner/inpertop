@@ -87,6 +87,7 @@ class PrefIncar(Incar):
         self['LORBIT'] = 12
         self['ICHARG'] = 11
         self['SIGMA'] = 0.002
+        self['LWAVE'] = False
 
     def set_magnetic(self, staticpath = '../static'):
         """
