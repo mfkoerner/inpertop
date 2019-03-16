@@ -99,7 +99,7 @@ class PrefIncar(Incar):
         self['ICHARG'] = 11
         self['SIGMA'] = 0.002
         self['LWAVE'] = False
-        self.remove_tag['MAGMOM']   # this should come from a preconverged CHGCAR
+        self.remove_tag('MAGMOM')   # this should come from a preconverged CHGCAR
 
     def set_magnetic(self, rundir = '.', use_CHGCAR = True):
         """
