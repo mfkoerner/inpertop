@@ -50,7 +50,7 @@ class PrefIncar(Incar):
         self['LREAL'] = False
         self['EDIFF'] = 1e-6
         self['Prec'] = 'High'
-        self['LWAVE'] = False
+        self['LWAVE'] = True
         self['LASPH'] = True
         self['ISMEAR'] = -5
         self['LMAXMIX'] = 6
@@ -98,7 +98,7 @@ class PrefIncar(Incar):
         self['LORBIT'] = 12
         self['ICHARG'] = 11
         self['SIGMA'] = 0.002
-        self['LWAVE'] = False
+        self['LWAVE'] = True
         self.remove_tag('MAGMOM')   # this should come from a preconverged CHGCAR
 
     def set_magnetic(self, rundir = '.', use_CHGCAR = True):
