@@ -188,7 +188,9 @@ class PrefIncar(Incar):
         mag_3d_init = [0.0 for i in range(len(mag_init) * 3)]
         for i in range(len(mag_init)):
             mag_3d_init[3*i] = mag_init[i]
-        return mag_3d_init
+        mag_3d_list_strings = ['{:3.1f}'.format(i) for i in mag_3d_init]
+        mag_3d_string = ' '.join(mag_3d_list_strings)
+        return mag_3d_string
 
     def is_compound_magnetic(self, rundir = '.'):
         mag_init = self.get_POSCAR_mag_init(rundir = rundir)
