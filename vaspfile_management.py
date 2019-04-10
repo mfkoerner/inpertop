@@ -190,6 +190,7 @@ class PrefIncar(Incar):
             mag_3d_init[3*i] = mag_init[i]
         mag_3d_list_strings = ['{:3.1f}'.format(i) for i in mag_3d_init]
         mag_3d_string = ' '.join(mag_3d_list_strings)
+        print("Test")
         print(mag_3d_string)
         return mag_3d_string
 
