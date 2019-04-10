@@ -125,7 +125,7 @@ class PrefIncar(Incar):
             self.start_from_CHGCAR()
         self['LNONCOLLINEAR'] = True
         self['ISPIN'] = 2
-        self['MAGMOM'] = self.get_POSCAR_mag_init(rundir = rundir)
+        self['MAGMOM'] = self.get_3d_POSCAR_mag_init(rundir = rundir)
 
 
 
@@ -190,10 +190,10 @@ class PrefIncar(Incar):
             mag_3d_init[3*i] = mag_init[i]
         mag_3d_list_strings = ['{:3.1f}'.format(i) for i in mag_3d_init]
         mag_3d_string = ' '.join(mag_3d_list_strings)
-        print("Test")
-        print(mag_3d_string)
-        with open('output', 'w') as f:
-            f.write(mag_3d_string)
+        # print("Test")
+        # print(mag_3d_string)
+        # with open('output', 'w') as f:
+        #     f.write(mag_3d_string)
         return mag_3d_string
 
     def is_compound_magnetic(self, rundir = '.'):
