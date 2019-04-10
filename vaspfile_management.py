@@ -125,7 +125,7 @@ class PrefIncar(Incar):
             self.start_from_CHGCAR()
         self['LNONCOLLINEAR'] = True
         self['ISPIN'] = 2
-        self['MAGMOM'] = self.get_3d_POSCAR_mag_init(rundir = rundir)
+        self['MAGMOM'] = self.get_POSCAR_mag_init(rundir = rundir)
 
 
 
