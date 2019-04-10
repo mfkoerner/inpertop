@@ -192,6 +192,8 @@ class PrefIncar(Incar):
         mag_3d_string = ' '.join(mag_3d_list_strings)
         print("Test")
         print(mag_3d_string)
+        with open('output', 'w') as f:
+            f.write(mag_3d_string)
         return mag_3d_string
 
     def is_compound_magnetic(self, rundir = '.'):
