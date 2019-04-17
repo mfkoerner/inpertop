@@ -149,7 +149,7 @@ class PrefIncar(Incar):
         """
         self.unset_relaxation()
         self.start_from_CHGCAR()
-        self['PRECFOCK'] = PRECFOC
+        self['PRECFOCK'] = PRECFOCK
         self['ALGO'] = 'All'#sets IALGO=58:all band simultanious update orbitals
         self['TIME'] = 0.4
         self['LHFCALC'] = True
