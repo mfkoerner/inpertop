@@ -140,6 +140,21 @@ class PrefIncar(Incar):
         self['LSORBIT'] = True
         self['LNONCOLLINEAR'] = True
 
+    def set_HSE(self, PRECFOCK = 'normal'):
+        """
+        most likely use with SOC
+        start from SOC static run if from SOC
+        start from normal static run if not SOC
+        can also do PRECFOC = 'normal'
+        """
+        self.unset_relaxation()
+        self.start_from_CHGCAR()
+        self['PRECFOCK'] = PRECFOC
+        self['ALGO'] = 'All'#sets IALGO=58:all band simultanious update orbitals
+        self['TIME'] = 0.4
+        self['LHFCALC'] = True
+        self['HFSCREEN'] = 0.2
+        self['ISMEAR'] = 0
 
     def set_wavecar(self, value = True):
         """
@@ -182,6 +197,8 @@ class PrefIncar(Incar):
     def get_3d_POSCAR_mag_init(self, rundir = '.', default_value = 3):
         """
         Returns 3d version of mag_init for use in noncollinear runs
+        THIS ONLY WORKS IF YOU REMOVE THE LOGIC IN INCAR FOR MAGMOM_ncl
+        Their native solution fails miserably
         """
         mag_init = self.get_POSCAR_mag_init(rundir = rundir,
             default_value = default_value)
